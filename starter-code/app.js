@@ -10,7 +10,9 @@ const dotenv         = require('dotenv');
 const session        = require('express-session');
 const flash          = require('connect-flash');
 const passport       = require('passport');
-const passportLocal  = require('passport-local');
+const LocalStrategy  = require('passport-local').Strategy;
+const bcrypt         = require('bcrypt');
+const User           = require('./models/user.js');
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI);
@@ -39,6 +41,34 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, next) => {
+  User.findOne({ email : email }, (err, user) => {
+    if (err) {
+      next(err);
+    } else if (!user) {
+      next(null, false, { message: 'Incorrect email' });
+    } else if (!bcrypt.compareSync(password, user.password)) {
+      next(null, false, { message: 'Incorrect password' });
+    } else {
+      next(null, user);
+    }
+  });
+}));
+
+passport.serializeUser((user, cb) => {
+  cb(null, user._id);
+});
+
+passport.deserializeUser((id, cb) => {
+  User.findOne({ '_id': id }, (err, user) => {
+    if (err) {
+      cb(err);
+      return;
+    }
+    cb(null, user);
+  });
+});
 
 //===Routes===
 

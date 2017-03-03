@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 const User = require('../models/user');
 
@@ -59,6 +60,19 @@ router.post('/signup', (req, res, next) => {
 
       res.redirect('/');
     });
+  });
+});
+
+router.get('/login', (req, res, next) => {
+  res.render('auth/login');
+});
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    succesReturnToOrRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true,
+    succesFlash: 'You have been logged in, user!'
   });
 });
 
