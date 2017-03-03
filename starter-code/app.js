@@ -5,9 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
+const mongoose       = require('mongoose');
+const dotenv         = require('dotenv');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+dotenv.config();
+mongoose.connect(process.env.MONGODB_URI);
 
 var app = express();
 
@@ -26,8 +28,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//===Routes===
+
+const index = require('./routes/index');
 app.use('/', index);
-app.use('/users', users);
+const users = require('./routes/users');
+app.use('/', users);
+const authRoutes = require('./routes/authRoutes');
+app.use('/', authRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
