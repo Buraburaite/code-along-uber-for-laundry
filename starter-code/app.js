@@ -7,6 +7,10 @@ var bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose       = require('mongoose');
 const dotenv         = require('dotenv');
+const session        = require('express-session');
+const flash          = require('connect-flash');
+const passport       = require('passport');
+const passportLocal  = require('passport-local');
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI);
@@ -27,6 +31,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'uber for laundry and stuff pls',
+  resave: true,
+  saveUnintialized: true
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //===Routes===
 
