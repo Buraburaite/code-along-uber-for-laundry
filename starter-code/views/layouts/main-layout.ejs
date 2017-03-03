@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <header>
-      <h1> <a href="/"> <%= title %> </a> </h1>
-    </header>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+  <header>
+    <h1> <a href="/"> <%= title %> </a> </h1>
+    
+    <nav>
+      <ul>
+        <li> <a href="/signup"> Sign Up </a> </li>
+        <li> <a href="/login"> Log In </a> </li>
+        <li> <a href="/launderers"> Find a Launderer </a> </li>
+        <li> <a href="/dashboard"> See Dashboard </a> </li>
+        <li> <a href="/logout"> Log Out </a> </li>
+      </ul>
+    </nav>
 
-    <%- body -%>
+  </header>
 
-    <footer>
-      <p> Made with &hearts; at Ironhack. </p>
-    </footer>
-  </body>
+  <%- body -%>
+
+  <footer>
+    <p> Made with &hearts; at Ironhack. </p>
+  </footer>
+</body>
 </html>
